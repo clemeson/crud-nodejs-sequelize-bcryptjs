@@ -1,21 +1,26 @@
-const user = require('../models/modelsUser');
+const userModels = require('../models/modelsUser');
 
 const bcrypt = require('bcryptjs');
+const user = require('../models/modelsUser');
 
 
 
 
 async function getUserById(id){ //faz a leitura no banco para pegar apenas um usuario, neste caso pelo ID, esse metodo reprenta também a letra R do crud, pois o mesmo faz uma leutura.
-    const getUserId = await user.findByPk(id)
+    const getUserId = await userModels.findByPk(id)
     return getUserId;
 }
 
+async function getAllUser(){
+    const getAll = userModels.findAll();
+    return getAll;
+}
 
 
 async function createUser(newUser){  //cria um novo usuario este metodo representa a letra C do CRUD, pois o mesmo faz o de insersão de dados na tabela CREATE
 
     const salt = await bcrypt.genSaltSync(process.env.SALT);
-    const createOneUser = await user.create({
+    const createOneUser = await userModels.create({
 
         login: newUser.login,
         password: await bcrypt.hashSync(newUser.password, salt), 
@@ -48,9 +53,18 @@ async function updateUser(id,newUser){ //
     return userCurrent; 
 }
 
+async function deleteUser(id){
+
+    const deleteUserById = await getUserById(id);
+
+    await deleteUserById.destroy()
+}
+
 module.exports = {
  
     createUser, 
     updateUser,
-    getUserById
+    getAllUser,
+    getUserById,
+    deleteUser
 }

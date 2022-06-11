@@ -1,1 +1,2 @@
-# crud-nodejs-sequelize-bcryptjs-jwt
+# crud-nodejs-sequelize-bcryptjs
+

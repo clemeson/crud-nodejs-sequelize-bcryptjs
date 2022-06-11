@@ -1,11 +1,12 @@
 
-const user = require('./repositories/repositories')
+const user = require('./models/modelsUser');
+const userRepositories = require('./repositories/repositories')
 
 async function create(req, res, next){
 
     const {name, login, cpf, password} = req.body;
 
-    const objUser = await user.createUser({
+    const objUser = await userRepositories.createUser({
 
         name: name,
         login: login,
@@ -18,10 +19,16 @@ async function create(req, res, next){
     
 }
 
+async function getAll(req, res, next){
+    const allUser = await userRepositories.getAllUser()
+    res.json(allUser)
+}
+
+
 async function read(req, res, next){
 
     const id = req.params.id;
-    const getOneUser = await user.getUserById(id);
+    const getOneUser = await userRepositories.getUserById(id);
     
     res.json(getOneUser)
 }
@@ -32,19 +39,22 @@ async function update(req, res, next){
 
    
     
-    const userUpdated = await user.updateUser(id, newUser);
+    const userUpdated = await userRepositories.updateUser(id, newUser);
 
 
     res.json(userUpdated)
 }
 
 async function destroy(req, res, next){
-
+    const id = req.params.id;
+    await userRepositories.deleteUser(id)
+    res.sendStatus(200)
 }
 
 module.exports = {
     create,
     read,
     update,
+    getAll,
     destroy
 }
